@@ -18,10 +18,17 @@ genai.configure(api_key=api_key)
 # Streamlit UI setup
 st.set_page_config(page_title="Text to Code Generator", layout="centered")
 st.title("🧠 Text to Code Generator using Gemini")
-st.write("Describe what your code should do, and let AI generate the code!")
+st.write("Describe what your code should do, select a programming language, and let AI generate the code!")
 
 # User input
 prompt = st.text_area("💬 Describe the code (e.g., 'add 2 numbers')")
+
+# Language selection, now including SQL
+languages = [
+    "Python", "JavaScript", "Java", "C++", "C#", "Go", "Ruby", "PHP",
+    "TypeScript", "Swift", "Kotlin", "Rust", "SQL"
+]
+language = st.selectbox("📝 Select programming language", languages, index=0)
 
 if st.button("Generate Code"):
     if not prompt.strip():
@@ -29,14 +36,17 @@ if st.button("Generate Code"):
     else:
         with st.spinner("Generating code..."):
             try:
-                # Use a valid Gemini model name (update as needed)
                 model = genai.GenerativeModel("gemini-1.5-flash")
-                response = model.generate_content(
-                    f"Generate Python code for the following task:\n{prompt}"
+                system_prompt = (
+                    f"You are an expert {language} developer. "
+                    "Write clean, efficient, and well-documented code following best practices. "
+                    f"Generate {language} code for the following task:\n{prompt}"
                 )
-                # Some Gemini responses may return a list of candidates
+                response = model.generate_content(system_prompt)
                 code = response.text if hasattr(response, "text") else str(response)
+                # For Streamlit code highlighting, use 'sql' for SQL, else language.lower()
+                code_lang = "sql" if language.lower() == "sql" else language.lower()
                 st.success("✅ Code generated successfully!")
-                st.code(code, language="python")
+                st.code(code, language=code_lang)
             except Exception as e:
                 st.error(f"Error: {e}")
