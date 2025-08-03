@@ -8,8 +8,18 @@ load_dotenv(dotenv_path=".env")
 
 # Retrieve Gemini API key
 api_key = os.getenv("GEMINI_API_KEY", "").strip()
+
+# Retrieve API key with priority: Streamlit Secrets > .env > empty string
+api_key = (
+    st.secrets.get("GEMINI_API_KEY")  # First try Streamlit Secrets (for deployment)
+    or os.getenv("GEMINI_API_KEY", "").strip()  # Then check .env (for local dev)
+)
 if not api_key:
-    st.error("Gemini API key not found. Please set GEMINI_API_KEY in your .env file.")
+    st.error("""
+    Gemini API key not found. Please:
+    1. For deployment: Add GEMINI_API_KEY in Streamlit Cloud Secrets (app settings ⚙️)
+    2. For local dev: Create `.env` file with GEMINI_API_KEY=your_key
+    """)
     st.stop()
 
 # Configure Gemini
