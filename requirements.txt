@@ -1,0 +1,7 @@
+streamlit
+python-dotenv
+google-generativeai
+google-auth
+protobuf
+google-ai-generativelanguage
+google-api-core
