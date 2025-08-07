@@ -11,7 +11,7 @@ This Streamlit app lets you describe what your code should do (e.g., "add 2 numb
 
 ## ✨ Features
 
-- Supports multiple languages: Python, JavaScript, Java, C++, C#, Go, Ruby, PHP, TypeScript, Swift, Kotlin, Rust, SQL
+- Supports multiple languages: Python, JavaScript, Java, C++, SQL
 - Simple, interactive Streamlit UI
 - Powered by Gemini AI for high-quality, well-documented code
 - Environment variable management with `.env`
